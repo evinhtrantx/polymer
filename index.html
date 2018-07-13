@@ -7,7 +7,7 @@
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
+      #mapArea {
         height: 100%;
       }
       /* Optional: Makes the sample page fill the window. */
@@ -19,17 +19,33 @@
     </style>
 </head>
 <body>
-<div id="map"></div>
-<script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 21.028665, lng: 105.852129},
-          zoom: 8
-        });
-      }
-    </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs4fw0aPdBseEztFzEr6TPWBzqr0Yo8vw&callback=initMap"
-        async defer></script>
+<div id="mapArea"></div>
+<script src="js/map-style.js"></script>
+<script src="js/app.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs4fw0aPdBseEztFzEr6TPWBzqr0Yo8vw&callback=initMap"   async defer></script>
+<script defer>
+var _map;
+var runningLine = new Array();
+var startPoint = {lat:21.028830, lng:105.851335}
+var prevPoint = startPoint
+runningLine.push(startPoint)
+function lineTo(latV,lngV){
+    var thisPoint = {lat:latV,lng:lngV}
+    runningLine.push(thisPoint)
+    var line = new google.maps.Polyline({strokeColor:'red',path:[prevPoint,thisPoint],strokeWeight:2});
+    line.setMap(_map)//show the line on the map
+    prevPoint = thisPoint
+}
+function initMap(){
+    initMapLocal('mapArea');
+    var startPointMarker = new google.maps.Marker({
+    position: startPoint,
+    map:_map,
+    title: 'Start Point'
+  })
+  lineTo(21.028021, 105.85110)
+}
+
+</script>
 </body>
 </html>
